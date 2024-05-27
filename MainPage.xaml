@@ -1,0 +1,45 @@
+﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:WeatherApp"
+             x:Class="WeatherApp.MainPage">
+
+    <Grid>
+        <!-- Main content -->
+        <StackLayout Padding="1" VerticalOptions="Center">
+            <!-- Weather card to display temperature and condition -->
+            <Frame x:Name="WeatherCard" CornerRadius="15" HasShadow="True" Padding="30" Margin="60" WidthRequest="350">
+                <StackLayout>
+                    <Label x:Name="LocationLabel" Text="{Binding Location}" FontSize="Large" Padding="10" HorizontalOptions="Center"/>
+
+                    <!-- WeatherIcon control -->
+                    <local:SvgImageView Source="{Binding WeatherIconPath}" WidthRequest="50" HeightRequest="50" />
+
+                    <!-- Temperature Label -->
+                    <Label x:Name="TemperatureLabel" Text="{Binding Temperature}" FontSize="Large" Padding="10" HorizontalOptions="Center"/>
+                    <!-- Condition Label -->
+                    <Label x:Name="ConditionLabel" Text="{Binding Condition}" FontSize="Medium" HorizontalOptions="Center"/>
+                </StackLayout>
+            </Frame>
+        </StackLayout>
+
+        <!-- Error Label -->
+        <Label x:Name="ErrorLabel" Text="{Binding Error}" FontSize="Large" HorizontalOptions="Center" TextColor="Red"/>
+
+        <!-- Menu button in the top right corner -->
+        <Button x:Name="MenuButton" Text="☰" Clicked="OnMenuClicked" HorizontalOptions="End" VerticalOptions="Start" BackgroundColor="#C0C0C0" FontSize="Large" />
+
+        <!-- Overlay with entry box for location -->
+        <AbsoluteLayout x:Name="MenuOverlay" IsVisible="False" BackgroundColor="Black" Opacity="0.8" 
+                        HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+            <StackLayout AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All" Padding="40" BackgroundColor="White">
+                <Frame BackgroundColor="LightGray" CornerRadius="10">
+                    <StackLayout>
+                        <Entry x:Name="OverlayLocationEntry" Placeholder="Enter location" HorizontalOptions="FillAndExpand" TextColor="Black"/>
+                        <Button Text="Get Weather" Clicked="OnOverlayGetWeatherClicked" HorizontalOptions="FillAndExpand" Margin="0,10,0,0"/>
+                        <Button x:Name="CloseMenuButton" Text="Close Menu" Clicked="OnCloseMenuClicked" HorizontalOptions="FillAndExpand" VerticalOptions="End" Margin="0,20,0,0"/>
+                    </StackLayout>
+                </Frame>
+            </StackLayout>
+        </AbsoluteLayout>
+    </Grid>
+</ContentPage>

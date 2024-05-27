@@ -1,0 +1,106 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFrameworks>net7.0-android;net7.0-ios;net7.0-maccatalyst</TargetFrameworks>
+		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net7.0-windows10.0.19041.0</TargetFrameworks>
+		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
+		<!-- <TargetFrameworks>$(TargetFrameworks);net7.0-tizen</TargetFrameworks> -->
+		<OutputType>Exe</OutputType>
+		<RootNamespace>WeatherApp</RootNamespace>
+		<UseMaui>true</UseMaui>
+		<SingleProject>true</SingleProject>
+		<ImplicitUsings>enable</ImplicitUsings>
+
+		<!-- Display name -->
+		<ApplicationTitle>WeatherApp</ApplicationTitle>
+
+		<!-- App Identifier -->
+		<ApplicationId>com.companyname.weatherapp</ApplicationId>
+		<ApplicationIdGuid>df03c17f-b54e-4512-b4f9-e82e4ec092db</ApplicationIdGuid>
+
+		<!-- Versions -->
+		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+		<ApplicationVersion>1</ApplicationVersion>
+
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">11.0</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">13.1</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
+		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<!-- App Icon -->
+		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
+
+		<!-- Splash Screen -->
+		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
+
+		<!-- Images -->
+		<MauiImage Include="Resources\Images\*" />
+
+		<!-- Custom Fonts -->
+		<MauiFont Include="Resources\Fonts\*" />
+
+		<!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
+		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiImage Remove="Resources\Images\day.svg" />
+	  <MauiImage Remove="Resources\Images\thunder.svg" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Remove="Assets\bear.gif" />
+	  <None Remove="Assets\giphy.gif" />
+	  <None Remove="Assets\govno.jpeg" />
+	  <None Remove="Assets\image.gif" />
+	  <None Remove="Resources\Images\day.svg" />
+	  <None Remove="Resources\Images\thunder.svg" />
+	  <None Remove="Resources\Raw\cloudy.svg" />
+	  <None Remove="Resources\Raw\rainy-6.svg" />
+	  <None Remove="Resources\Raw\snowy-6.svg" />
+	  <None Remove="Resources\Raw\thunder.svg" />
+	  <None Remove="Resources\Raw\weather-sprite.svg" />
+	  <None Remove="Resources\Raw\weather.svg" />
+	  <None Remove="Resources\Raw\weather_sagittarius.svg" />
+	  <None Remove="Resources\Raw\weather_sunset.svg" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+		<PackageReference Include="Pro.Maui.Svg" Version="1.0.0" />
+		<PackageReference Include="SkiaSharp.Extended" Version="2.0.0" />
+		<PackageReference Include="SkiaSharp.Extended.UI.Maui" Version="2.0.0" />
+		<PackageReference Include="SkiaSharp.Svg" Version="1.60.0" />
+		<PackageReference Include="SkiaSharp.Views.Maui.Controls" Version="2.88.8" />
+		<PackageReference Include="SkiaSharp.Views.Maui.Core" Version="2.88.8" />
+		<PackageReference Include="Svg.Skia" Version="1.0.0.18" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Include="Assets\bear.gif" />
+	  <EmbeddedResource Include="Assets\giphy.gif" />
+	  <EmbeddedResource Include="Assets\govno.jpeg" />
+	  <EmbeddedResource Include="Assets\image.gif" />
+	  <EmbeddedResource Include="Assets\Rain.gif" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Include="Resources\Images\cloudy.svg" />
+	  <EmbeddedResource Include="Resources\Images\day.svg" />
+	  <EmbeddedResource Include="Resources\Images\rainy.svg" />
+	  <EmbeddedResource Include="Resources\Images\thunder.svg" />
+	  <MauiAsset Include="Resources\Images\snowy.svg" />
+	  <EmbeddedResource Include="Resources\Images\weathersvg.svg" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Resources\Raw\" />
+	</ItemGroup>
+
+</Project>
