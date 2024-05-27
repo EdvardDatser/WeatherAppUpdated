@@ -7,7 +7,7 @@ namespace WeatherApp.ViewModel
     public partial class MainViewModel : ObservableObject
     {
         [RelayCommand]
-        async Task RequsetLocation()
+        public async Task RequsetLocation()
         {
             if (DeviceInfo.Platform != DevicePlatform.Android)
                 return;

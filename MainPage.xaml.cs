@@ -2,6 +2,7 @@
 using System;
 using System.Timers;
 using System.Threading.Tasks;
+using WeatherApp.ViewModel;
 
 namespace WeatherApp
 {
@@ -21,6 +22,43 @@ namespace WeatherApp
             _timer = new System.Timers.Timer(60000); // Set the interval to 1 minute (60000 milliseconds)
             _timer.Elapsed += async (sender, e) => await UpdateWeatherData();
             _timer.Start();
+
+        }
+
+        public string anotherlocation;
+        public bool SelectFavoriteCity = false;
+
+
+        protected override void OnAppearing()
+        {
+
+            base.OnAppearing();
+            WeatherUpdate();
+        }
+
+
+        private void WeatherUpdate()
+        {
+            if (SelectFavoriteCity)
+            {
+                ViewModel.GetWeatherByLocationName(anotherlocation);
+                SelectFavoriteCity = false;
+                var navigationStack = Navigation.NavigationStack;
+
+                // Удаление Page1 и Page2 из стека
+                for (int i = navigationStack.Count - 2; i >= 0; i--) // - 2 это предпоследняя страница; если ставить - 1 будет последняя
+                {
+                    //Внутри цикла мы получаем ссылку на страницу по текущему индексу i и вызываем метод RemovePage у объекта Navigation, чтобы удалить эту страницу из стека навигации.
+                    var page = navigationStack[i];
+                    Navigation.RemovePage(page);
+                }
+            }
+        }
+
+        private async void OnFavoriteClicked(object sender, EventArgs e)
+        {
+            DBListPage listPage = new DBListPage();
+            await Navigation.PushAsync(listPage);
         }
 
         private async Task UpdateWeatherData()
@@ -50,5 +88,7 @@ namespace WeatherApp
                 MenuOverlay.IsVisible = false;
             }
         }
+
+
     }
 }
