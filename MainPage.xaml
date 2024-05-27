@@ -12,7 +12,7 @@
                     <Label x:Name="LocationLabel" Text="{Binding Location}" FontSize="Large" Padding="10" HorizontalOptions="Center"/>
 
                     <!-- WeatherIcon control -->
-                    <local:SvgImageView Source="{Binding WeatherIconPath}" WidthRequest="50" HeightRequest="50" />
+                    <local:SvgImageView x:Name="WeatherIcon" Source="{Binding WeatherIconPath}" WidthRequest="50" HeightRequest="50" />
 
                     <!-- Temperature Label -->
                     <Label x:Name="TemperatureLabel" Text="{Binding Temperature}" FontSize="Large" Padding="10" HorizontalOptions="Center"/>

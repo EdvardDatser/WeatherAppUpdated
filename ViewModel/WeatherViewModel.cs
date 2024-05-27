@@ -174,6 +174,7 @@ namespace WeatherApp
 
         private string GetWeatherIconPath(string condition)
         {
+            // Constructing the icon name based on the weather condition
             string iconName = "";
 
             if (condition.ToLower().Contains("rain"))
@@ -200,6 +201,7 @@ namespace WeatherApp
             // Adjust the path according to your actual SVG file location
             return $"Resources.Images.{iconName}";
         }
+
 
         protected virtual void OnPropertyChanged(string propertyName)
         {

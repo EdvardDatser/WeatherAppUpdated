@@ -5,13 +5,16 @@ using SkiaSharp.Views.Maui.Controls;
 using System;
 using System.IO;
 using System.Reflection;
+using System.Timers;
 
 namespace WeatherApp
 {
     public class SvgImageView : ContentView
     {
-        private SKSvg svg; // SKSvg object to hold the SVG data
+        private SkiaSharp.Extended.Svg.SKSvg svg; // Use SkiaSharp.Extended.Svg.SKSvg
         private readonly SKCanvasView canvasView; // SKCanvasView for drawing the SVG
+        private readonly System.Timers.Timer animationTimer; // Timer for animation
+        private float rotationAngle; // Rotation angle for animation
 
         public static readonly BindableProperty SourceProperty = BindableProperty.Create(
             nameof(Source), typeof(string), typeof(SvgImageView), null, propertyChanged: OnSourceChanged);
@@ -30,6 +33,11 @@ namespace WeatherApp
             canvasView = new SKCanvasView();
             canvasView.PaintSurface += OnPaintSurface; // Subscribe to the PaintSurface event
             Content = canvasView; // Set the ContentView to the SKCanvasView
+
+            // Initialize and start the animation timer
+            animationTimer = new System.Timers.Timer(16); // Approximately 60 FPS
+            animationTimer.Elapsed += OnAnimationTimerElapsed;
+            animationTimer.Start();
         }
 
         // Event handler for changes in the Source property
@@ -47,16 +55,16 @@ namespace WeatherApp
             try
             {
                 var assembly = Assembly.GetExecutingAssembly();
-                var resourceName = $"{assembly.GetName().Name}.Resources.Images.{svgSource}";
+                var resourceName = $"{assembly.GetName().Name}.{svgSource}";
 
-                // Debug information to verify the constructed resource name
-                Console.WriteLine($"Resource Name: {resourceName}");
+                // Log information to verify the constructed resource name
+                System.Diagnostics.Debug.WriteLine($"Resource Name: {resourceName}");
 
                 using (var stream = assembly.GetManifestResourceStream(resourceName))
                 {
                     if (stream != null)
                     {
-                        svg = new SKSvg();
+                        svg = new SkiaSharp.Extended.Svg.SKSvg(); // Use SkiaSharp.Extended.Svg.SKSvg
                         svg.Load(stream);
                         canvasView.InvalidateSurface();
                     }
@@ -86,8 +94,18 @@ namespace WeatherApp
                 var scale = Math.Min(canvasSize.Width / svgSize.Width, canvasSize.Height / svgSize.Height); // Calculate the scale factor
                 var matrix = SKMatrix.CreateScale(scale, scale); // Create a scale matrix
 
+                // Apply rotation transformation for animation
+                matrix = matrix.PostConcat(SKMatrix.CreateRotationDegrees(rotationAngle, canvasSize.Width / 2, canvasSize.Height / 2));
+
                 canvas.DrawPicture(svg.Picture, ref matrix); // Draw the SVG on the canvas with the scale matrix
             }
+        }
+
+        // Event handler for the animation timer
+        private void OnAnimationTimerElapsed(object sender, ElapsedEventArgs e)
+        {
+            rotationAngle += 1; // Increment the rotation angle for the animation
+            canvasView.InvalidateSurface(); // Invalidate the canvas to trigger a redraw
         }
     }
 }
