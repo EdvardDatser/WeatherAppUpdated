@@ -11,15 +11,15 @@
             <!-- Weather card to display temperature and condition -->
             <Frame x:Name="WeatherCard" CornerRadius="15" HasShadow="True" Padding="30" Margin="60" WidthRequest="350">
                 <StackLayout>
-                    <Label x:Name="LocationLabel" Text="{Binding Location}" FontSize="Large" Padding="10" HorizontalOptions="Center"/>
+                    <Label x:Name="LocationLabel" Text="{Binding Location}" FontSize="Large" Padding="10" HorizontalOptions="Center" TextColor="Black"/>
 
                     <!-- WeatherIcon control -->
                     <local:SvgImageView x:Name="WeatherIcon" Source="{Binding WeatherIconPath}" WidthRequest="50" HeightRequest="50" />
 
                     <!-- Temperature Label -->
-                    <Label x:Name="TemperatureLabel" Text="{Binding Temperature}" FontSize="Large" Padding="10" HorizontalOptions="Center"/>
+                    <Label x:Name="TemperatureLabel" Text="{Binding Temperature}" FontSize="Large" Padding="10" HorizontalOptions="Center" TextColor="Black"/>
                     <!-- Condition Label -->
-                    <Label x:Name="ConditionLabel" Text="{Binding Condition}" FontSize="Medium" HorizontalOptions="Center"/>
+                    <Label x:Name="ConditionLabel" Text="{Binding Condition}" FontSize="Medium" HorizontalOptions="Center" TextColor="Black"/>
                 </StackLayout>
             </Frame>
         </StackLayout>
