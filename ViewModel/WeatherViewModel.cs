@@ -96,7 +96,7 @@ namespace WeatherApp
 
         public async Task GetWeatherByLocationName(string locationName)
         {
-            string url = $"https://api.weatherapi.com/v1/current.json?key=aa7758b35f384a5eb62102337241405&q={locationName}&aqi=no";
+            string url = $"https://api.weatherapi.com/v1/current.json?key=f70e1b95550348eaab454224242905&q={locationName}&aqi=no";
 
             using (HttpClient client = new HttpClient())
             {
@@ -135,7 +135,7 @@ namespace WeatherApp
 
         private async Task GetWeatherFromLocation(double latitude, double longitude)
         {
-            string url = $"https://api.weatherapi.com/v1/current.json?key=aa7758b35f384a5eb62102337241405&q={latitude},{longitude}&aqi=no";
+            string url = $"https://api.weatherapi.com/v1/current.json?key=f70e1b95550348eaab454224242905&q={latitude},{longitude}&aqi=no";
 
             using (HttpClient client = new HttpClient())
             {

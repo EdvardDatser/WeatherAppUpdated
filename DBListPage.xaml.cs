@@ -51,7 +51,7 @@ public partial class DBListPage : ContentPage
 
     public async Task RetrieveWeatherData(string location, City city)
     {
-        string url = $"https://api.weatherapi.com/v1/current.json?key=aa7758b35f384a5eb62102337241405&q={location}&aqi=no";
+        string url = $"https://api.weatherapi.com/v1/current.json?key=f70e1b95550348eaab454224242905&q={location}&aqi=no";
 
         using (HttpClient client = new HttpClient())
         {

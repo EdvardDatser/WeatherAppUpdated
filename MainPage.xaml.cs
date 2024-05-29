@@ -10,6 +10,7 @@ namespace WeatherApp
     {
         public WeatherViewModel ViewModel { get; }
         private System.Timers.Timer _timer;  // Use the fully qualified name
+        MainViewModel mainViewModel = new MainViewModel();
 
         public MainPage()
         {
@@ -19,15 +20,33 @@ namespace WeatherApp
             BindingContext = ViewModel;
 
             // Periodically update the weather data
-            _timer = new System.Timers.Timer(60000); // Set the interval to 1 minute (60000 milliseconds)
-            _timer.Elapsed += async (sender, e) => await UpdateWeatherData();
-            _timer.Start();
+            //_timer = new System.Timers.Timer(900000); // Set the interval to 1 minute (60000 milliseconds)  (Постявил 15 минут (900000 милисекунд))
+            //_timer.Elapsed += async (sender, e) => await UpdateWeatherData();
+            //_timer.Start();
 
+            GetPermission();
         }
 
         public string anotherlocation;
         public bool SelectFavoriteCity = false;
 
+        bool permission = false;
+        public async void GetPermission()
+        {
+            var status = PermissionStatus.Unknown;
+            status = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
+            if (status == PermissionStatus.Granted)
+            {
+                return;
+            }
+            else
+            {
+                await mainViewModel.RequsetLocation();
+                await UpdateWeatherData();
+                ErrorLabel.Text = null;
+            }
+            
+        }
 
         protected override void OnAppearing()
         {
