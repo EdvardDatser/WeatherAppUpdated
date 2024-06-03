@@ -31,7 +31,6 @@ namespace WeatherApp
         public string anotherlocation;
         public bool SelectFavoriteCity = false;
 
-        bool permission = false;
         public async void GetPermission()
         {
             var status = PermissionStatus.Unknown;
@@ -63,15 +62,7 @@ namespace WeatherApp
             {
                 ViewModel.GetWeatherByLocationName(anotherlocation);
                 SelectFavoriteCity = false;
-                var navigationStack = Navigation.NavigationStack;
-
-                // Удаление всех страниц, кроме последней
-                for (int i = navigationStack.Count - 2; i >= 0; i--) // - 2 это предпоследняя страница; если ставить - 1 будет последняя
-                {
-                    //Внутри цикла мы получаем ссылку на страницу по текущему индексу i и вызываем метод RemovePage у объекта Navigation, чтобы удалить эту страницу из стека навигации.
-                    var page = navigationStack[i];
-                    Navigation.RemovePage(page);
-                }
+                Shell.SetNavBarIsVisible(this, false);
             }
         }
 
