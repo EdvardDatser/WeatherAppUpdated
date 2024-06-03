@@ -20,6 +20,8 @@
                     <Label x:Name="TemperatureLabel" Text="{Binding Temperature}" FontSize="Large" Padding="10" HorizontalOptions="Center" TextColor="Black"/>
                     <!-- Condition Label -->
                     <Label x:Name="ConditionLabel" Text="{Binding Condition}" FontSize="Medium" HorizontalOptions="Center" TextColor="Black"/>
+                    <!-- Humidity Label -->
+                    <Label x:Name="HumidityLabel" Text="{Binding Humidity}" FontSize="Medium" HorizontalOptions="Center" TextColor="Black"/>
                 </StackLayout>
             </Frame>
         </StackLayout>
@@ -29,7 +31,7 @@
 
         <!-- Menu button in the top right corner -->
         <Button x:Name="MenuButton" Text="☰" Clicked="OnMenuClicked" HorizontalOptions="End" VerticalOptions="Start" BackgroundColor="#C0C0C0" FontSize="Large" />
-        
+
         <!-- Overlay with entry box for location -->
         <AbsoluteLayout x:Name="MenuOverlay" IsVisible="False" BackgroundColor="Black" Opacity="0.8" 
                         HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">

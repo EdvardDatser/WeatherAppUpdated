@@ -3,6 +3,7 @@ using System;
 using System.Timers;
 using System.Threading.Tasks;
 using WeatherApp.ViewModel;
+using Plugin.LocalNotification;
 
 namespace WeatherApp
 {
@@ -20,9 +21,9 @@ namespace WeatherApp
             BindingContext = ViewModel;
 
             // Periodically update the weather data
-            //_timer = new System.Timers.Timer(900000); // Set the interval to 1 minute (60000 milliseconds)  (Постявил 15 минут (900000 милисекунд))
-            //_timer.Elapsed += async (sender, e) => await UpdateWeatherData();
-            //_timer.Start();
+            _timer = new System.Timers.Timer(60000); // Set the interval to 1 minute (60000 milliseconds)  (Постявил 15 минут (900000 милисекунд))
+            _timer.Elapsed += async (sender, e) => await UpdateWeatherData();
+            _timer.Start();
 
             GetPermission();
         }
@@ -64,7 +65,7 @@ namespace WeatherApp
                 SelectFavoriteCity = false;
                 var navigationStack = Navigation.NavigationStack;
 
-                // Удаление Page1 и Page2 из стека
+                // Удаление всех страниц, кроме последней
                 for (int i = navigationStack.Count - 2; i >= 0; i--) // - 2 это предпоследняя страница; если ставить - 1 будет последняя
                 {
                     //Внутри цикла мы получаем ссылку на страницу по текущему индексу i и вызываем метод RemovePage у объекта Navigation, чтобы удалить эту страницу из стека навигации.

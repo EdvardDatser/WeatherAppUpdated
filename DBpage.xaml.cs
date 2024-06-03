@@ -68,9 +68,13 @@ public partial class DBpage : ContentPage
                 string jsonResponse = await response.Content.ReadAsStringAsync();
                 JObject data = JObject.Parse(jsonResponse);
                 string temperature = data["current"]["temp_c"].ToString();
+                string humidity = data["current"]["humidity"].ToString();
+                string condition = data["current"]["condition"]["text"].ToString();
 
                 // После получения температуры присваиваем ее объекту city
                 city.temperature = temperature;
+                city.humidity = humidity;
+                city.condition = condition;
 
                 // Сохраняем объект city в базе данных
                 App.Database.SaveItem(city);

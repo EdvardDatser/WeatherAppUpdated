@@ -9,14 +9,24 @@
                 <DataTemplate>
                     <ViewCell>
                         <ViewCell.View>
-                            <StackLayout Orientation="Horizontal">
+                            <StackLayout>
                                 <Label FontSize="Medium">
                                     <Label.FormattedText>
                                         <FormattedString>
-                                            <Span Text="{Binding CityName}" />
-                                            <Span Text=" " />
+                                            <Span Text="{Binding CityName}"/>
+                                            <Span Text="                                    "/>
                                             <Span Text="{Binding temperature}" />
                                             <Span Text="°C" />
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
+                                <Label>
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <Span Text="Humidity: "/>
+                                            <Span Text="{Binding humidity}"/>
+                                            <Span Text="                                "/>
+                                            <Span Text="{Binding condition}" />
                                         </FormattedString>
                                     </Label.FormattedText>
                                 </Label>
