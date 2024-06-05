@@ -8,7 +8,6 @@
         <Entry Text="{Binding CityName}"/>
         <StackLayout Orientation="Horizontal">
             <Button Text="Save" Clicked="SaveCity"/>
-            <Button Text="Delete" Clicked="DeleteCity"/>
             <Button Text="Cancel" Clicked="Cancel"/>
             <Button Text="Select city" Clicked="SelectCity"/>
         </StackLayout>

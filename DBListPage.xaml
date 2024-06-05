@@ -32,6 +32,10 @@
                                 </Label>
                             </StackLayout>
                         </ViewCell.View>
+                        <ViewCell.ContextActions>
+                            <MenuItem x:Name="DeleteByHold" Text="Kustuta" IsDestructive="True" Clicked="DeleteCity"/>
+                            <MenuItem x:Name="MuudaByHold" Text="Muuda" IsDestructive="True" Clicked="MuudaCity"/>
+                        </ViewCell.ContextActions>
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>

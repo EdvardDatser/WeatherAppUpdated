@@ -49,6 +49,21 @@ public partial class DBListPage : ContentPage
         await Navigation.PushAsync(dBpage);
     }
 
+    private async void MuudaCity(object sender, EventArgs e)
+    {
+        City selectedCity = (City)((MenuItem)sender).BindingContext;
+        DBpage dBpage = new DBpage();
+        dBpage.BindingContext = selectedCity;
+        await Navigation.PushAsync(dBpage);
+    }
+
+    private void DeleteCity(object sender, EventArgs e)
+    {
+        var city = (City)((MenuItem)sender).BindingContext;
+        App.Database.DeleteItem(city.Id);
+        UpdateWeather();
+    }
+
     public async Task RetrieveWeatherData(string location, City city)
     {
         string url = $"https://api.weatherapi.com/v1/current.json?key=f70e1b95550348eaab454224242905&q={location}&aqi=no";

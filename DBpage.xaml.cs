@@ -20,19 +20,10 @@ public partial class DBpage : ContentPage
         await Navigation.PopAsync();
     }
 
-
-    private void DeleteCity(object sender, EventArgs e)
-    {
-        var city = (City)BindingContext;
-        App.Database.DeleteItem(city.Id);
-        this.Navigation.PopAsync();
-    }
     private void Cancel(object sender, EventArgs e)
     {
         this.Navigation.PopAsync();
     }
-
-
 
     private async void SelectCity(object sender, EventArgs e)
     {
