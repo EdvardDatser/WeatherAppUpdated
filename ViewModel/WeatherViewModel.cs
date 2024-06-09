@@ -2,10 +2,12 @@
 using Plugin.LocalNotification;
 using System;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Net.Http;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace WeatherApp
 {
@@ -20,6 +22,9 @@ namespace WeatherApp
         private string _error;
         private string _humidity;
         private ObservableCollection<HourlyForecast> _hourlyForecasts;
+        private string _wind_dir;
+        private string _wind_kph;
+        private string _feelslike_c;
 
         public string Error
         {
@@ -68,6 +73,36 @@ namespace WeatherApp
             {
                 _humidity = value;
                 OnPropertyChanged(nameof(Humidity));
+            }
+        }
+        
+        public string Wind_dir
+        {
+            get => _wind_dir;
+            set
+            {
+                _wind_dir = value;
+                OnPropertyChanged(nameof(Wind_dir));
+            }
+        }
+
+        public string Wind_kph
+        {
+            get => _wind_kph;
+            set
+            {
+                _wind_kph = value;
+                OnPropertyChanged(nameof(Wind_kph));
+            }
+        }
+        
+        public string Feelslike_c
+        {
+            get => _feelslike_c;
+            set
+            {
+                _feelslike_c = value;
+                OnPropertyChanged(nameof(Feelslike_c));
             }
         }
 
@@ -137,10 +172,17 @@ namespace WeatherApp
                         string curlocation = data.location.name;
                         string temperature = data.current.temp_c;
                         string condition = data.current.condition.text;
+                        string wind_dir = data.current.wind_dir;
+                        string wind_kph = data.current.wind_kph;
+                        string feelslike_c = data.current.feelslike_c;
 
                         Location = curlocation;
                         Temperature = $"Temperature: {temperature}°C";
                         Condition = condition;
+
+                        Wind_dir = $"Wind directiond: {wind_dir}";
+                        Wind_kph = $"Wind speed: {wind_kph}km";
+                        Feelslike_c = $"Feelslike: {feelslike_c}°C";
 
                         WeatherIconPath = GetWeatherIconPath(condition);
 
@@ -179,10 +221,17 @@ namespace WeatherApp
                         string temperature = data.current.temp_c;
                         string condition = data.current.condition.text;
                         string humidity = data.current.humidity;
+                        string wind_dir = data.current.wind_dir;
+                        string wind_kph = data.current.wind_kph;
+                        string feelslike_c = data.current.feelslike_c;
 
                         Location = curlocation;
                         Temperature = $"Temperature: {temperature}°C";
                         Condition = condition;
+
+                        Wind_dir = $"Wind directiond: {wind_dir}";
+                        Wind_kph = $"Wind speed: {wind_kph}km";
+                        Feelslike_c = $"Feelslike: {feelslike_c}°C";
 
                         Humidity = $"Humidity: {humidity}%";
                         Location = curlocation;

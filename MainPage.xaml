@@ -40,8 +40,15 @@
                     <LinearItemsLayout Orientation="Horizontal"/>
                 </CollectionView.ItemsLayout>
             </CollectionView>
-        </StackLayout>
 
+            <Frame CornerRadius="15" HasShadow="True" Padding="5" Margin="20" WidthRequest="350" BackgroundColor="White">
+                <StackLayout>
+                    <Label Text="{Binding Wind_dir}" FontSize="Small" Padding="5" HorizontalOptions="Center" TextColor="Black"/>
+                    <Label Text="{Binding Wind_kph}" FontSize="Small" Padding="5" HorizontalOptions="Center" TextColor="Black"/>
+                    <Label Text="{Binding Feelslike_c}" FontSize="Small" Padding="5" HorizontalOptions="Center" TextColor="Black"/>
+                </StackLayout>
+            </Frame>
+        </StackLayout>
         <!-- Error Label -->
         <Label x:Name="ErrorLabel" Text="{Binding Error}" FontSize="Large" HorizontalOptions="Center" TextColor="Red"/>
 
