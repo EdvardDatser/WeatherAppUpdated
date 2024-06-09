@@ -5,6 +5,7 @@ namespace WeatherApp;
 
 public partial class DBListPage : ContentPage
 {
+    MainPage mainPage = new MainPage();
     public DBListPage()
     {
         InitializeComponent();
@@ -36,9 +37,23 @@ public partial class DBListPage : ContentPage
     private async void OnItemSelected(object sender, SelectedItemChangedEventArgs e)
     {
         City selectedCity = (City)e.SelectedItem;
-        DBpage dBpage = new DBpage();
-        dBpage.BindingContext = selectedCity;
-        await Navigation.PushAsync(dBpage);
+
+        mainPage.anotherlocation = selectedCity.CityName;
+
+        City selectCity = App.Database.SelectCityByName(mainPage.anotherlocation);
+
+        if (selectCity != null)
+        {
+
+            mainPage.SelectFavoriteCity = true;
+            await Navigation.PushAsync(mainPage);
+
+        }
+        else
+        {
+            // Обработка ситуации, когда город не найден
+            await DisplayAlert("Error", "City not found", "OK");
+        }
     }
 
     public async void AddFavorite(object sender, EventArgs e)
@@ -47,6 +62,21 @@ public partial class DBListPage : ContentPage
         DBpage dBpage = new DBpage();
         dBpage.BindingContext = city;
         await Navigation.PushAsync(dBpage);
+    }
+
+    private async void MuudaCity(object sender, EventArgs e)
+    {
+        City selectedCity = (City)((MenuItem)sender).BindingContext;
+        DBpage dBpage = new DBpage();
+        dBpage.BindingContext = selectedCity;
+        await Navigation.PushAsync(dBpage);
+    }
+
+    private void DeleteCity(object sender, EventArgs e)
+    {
+        var city = (City)((MenuItem)sender).BindingContext;
+        App.Database.DeleteItem(city.Id);
+        UpdateWeather();
     }
 
     public async Task RetrieveWeatherData(string location, City city)
@@ -62,9 +92,13 @@ public partial class DBListPage : ContentPage
                 string jsonResponse = await response.Content.ReadAsStringAsync();
                 JObject data = JObject.Parse(jsonResponse);
                 string temperature = data["current"]["temp_c"].ToString();
+                string humidity = data["current"]["humidity"].ToString();
+                string condition = data["current"]["condition"]["text"].ToString();
 
                 // После получения температуры присваиваем ее объекту city
                 city.temperature = temperature;
+                city.humidity = humidity;
+                city.condition = condition;
 
                 // Сохраняем объект city в базе данных
                 App.Database.SaveItem(city);

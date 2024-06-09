@@ -2,6 +2,7 @@
 using System;
 using System.Timers;
 using System.Threading.Tasks;
+using WeatherApp.ViewModel;
 
 namespace WeatherApp
 {
@@ -9,6 +10,7 @@ namespace WeatherApp
     {
         public WeatherViewModel ViewModel { get; }
         private System.Timers.Timer _timer;  // Use the fully qualified name
+        MainViewModel mainViewModel = new MainViewModel();
 
         public MainPage()
         {
@@ -35,22 +37,15 @@ namespace WeatherApp
             status = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
             if (status == PermissionStatus.Granted)
             {
-                await UpdateWeatherData();
-                ErrorLabel.Text = null;
+                return;
             }
             else
             {
-                var permissionStatus = await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
-                if (permissionStatus == PermissionStatus.Granted)
-                {
-                    await UpdateWeatherData();
-                    ErrorLabel.Text = null;
-                }
-                else
-                {
-                    ErrorLabel.Text = "Location permission denied.";
-                }
+                await mainViewModel.RequsetLocation();
+                await UpdateWeatherData();
+                ErrorLabel.Text = null;
             }
+
         }
 
         protected override void OnAppearing()
@@ -65,15 +60,7 @@ namespace WeatherApp
             {
                 ViewModel.GetWeatherByLocationName(anotherlocation);
                 SelectFavoriteCity = false;
-                var navigationStack = Navigation.NavigationStack;
-
-                // Удаление Page1 и Page2 из стека
-                for (int i = navigationStack.Count - 2; i >= 0; i--) // - 2 это предпоследняя страница; если ставить - 1 будет последняя
-                {
-                    //Внутри цикла мы получаем ссылку на страницу по текущему индексу i и вызываем метод RemovePage у объекта Navigation, чтобы удалить эту страницу из стека навигации.
-                    var page = navigationStack[i];
-                    Navigation.RemovePage(page);
-                }
+                Shell.SetNavBarIsVisible(this, false);
             }
         }
 

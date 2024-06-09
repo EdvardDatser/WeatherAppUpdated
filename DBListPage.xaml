@@ -9,19 +9,33 @@
                 <DataTemplate>
                     <ViewCell>
                         <ViewCell.View>
-                            <StackLayout Orientation="Horizontal">
+                            <StackLayout>
                                 <Label FontSize="Medium">
                                     <Label.FormattedText>
                                         <FormattedString>
-                                            <Span Text="{Binding CityName}" />
-                                            <Span Text=" " />
+                                            <Span Text="{Binding CityName}"/>
+                                            <Span Text="                                    "/>
                                             <Span Text="{Binding temperature}" />
                                             <Span Text="°C" />
                                         </FormattedString>
                                     </Label.FormattedText>
                                 </Label>
+                                <Label>
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <Span Text="Humidity: "/>
+                                            <Span Text="{Binding humidity}"/>
+                                            <Span Text="                                "/>
+                                            <Span Text="{Binding condition}" />
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
                             </StackLayout>
                         </ViewCell.View>
+                        <ViewCell.ContextActions>
+                            <MenuItem x:Name="DeleteByHold" Text="Kustuta" IsDestructive="True" Clicked="DeleteCity"/>
+                            <MenuItem x:Name="MuudaByHold" Text="Muuda" IsDestructive="True" Clicked="MuudaCity"/>
+                        </ViewCell.ContextActions>
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>
