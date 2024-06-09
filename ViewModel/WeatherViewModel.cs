@@ -1,5 +1,6 @@
 ﻿using Microsoft.Maui.Controls;
 using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Net.Http;
@@ -16,6 +17,7 @@ namespace WeatherApp
         private string _condition;
         private string _weatherIconPath;
         private string _error;
+        private ObservableCollection<HourlyForecast> _hourlyForecasts;
 
         public string Error
         {
@@ -67,8 +69,19 @@ namespace WeatherApp
             }
         }
 
+        public ObservableCollection<HourlyForecast> HourlyForecasts
+        {
+            get => _hourlyForecasts;
+            set
+            {
+                _hourlyForecasts = value;
+                OnPropertyChanged(nameof(HourlyForecasts));
+            }
+        }
+
         public WeatherViewModel()
         {
+            HourlyForecasts = new ObservableCollection<HourlyForecast>();
             // Call GetCurrentLocation at startup
             Task.Run(GetCurrentLocation);
         }
@@ -96,7 +109,7 @@ namespace WeatherApp
 
         public async Task GetWeatherByLocationName(string locationName)
         {
-            string url = $"https://api.weatherapi.com/v1/current.json?key=f70e1b95550348eaab454224242905&q={locationName}&aqi=no";
+            string url = $"https://api.weatherapi.com/v1/forecast.json?key=f70e1b95550348eaab454224242905&q={locationName}&aqi=no&hours=24";
 
             using (HttpClient client = new HttpClient())
             {
@@ -118,6 +131,8 @@ namespace WeatherApp
                         Condition = condition;
 
                         WeatherIconPath = GetWeatherIconPath(condition);
+
+                        PopulateHourlyForecast(data);
                     }
                     else
                     {
@@ -135,7 +150,7 @@ namespace WeatherApp
 
         private async Task GetWeatherFromLocation(double latitude, double longitude)
         {
-            string url = $"https://api.weatherapi.com/v1/current.json?key=f70e1b95550348eaab454224242905&q={latitude},{longitude}&aqi=no";
+            string url = $"https://api.weatherapi.com/v1/forecast.json?key=f70e1b95550348eaab454224242905&q={latitude},{longitude}&aqi=no&hours=24";
 
             using (HttpClient client = new HttpClient())
             {
@@ -157,6 +172,8 @@ namespace WeatherApp
                         Condition = condition;
 
                         WeatherIconPath = GetWeatherIconPath(condition);
+
+                        PopulateHourlyForecast(data);
                     }
                     else
                     {
@@ -170,6 +187,65 @@ namespace WeatherApp
                     Debug.WriteLine($"An error occurred: {ex.Message}");
                 }
             }
+        }
+
+        private void PopulateHourlyForecast(dynamic data)
+        {
+            try
+            {
+                HourlyForecasts.Clear();
+
+                var forecastData = data.forecast.forecastday[0].hour;
+
+                // Find the index of the current hour
+                int currentHourIndex = GetCurrentHourIndex(forecastData);
+
+                // Start from the current hour index
+                int startIndex = currentHourIndex >= 0 ? currentHourIndex : 0;
+
+                for (int i = startIndex; i < forecastData.Count; i++)
+                {
+                    var hourData = forecastData[i];
+
+                    string timeStr = hourData.time;
+                    DateTime time = DateTime.Parse(timeStr);
+                    string condition = hourData.condition.text;
+                    string temperature = hourData.temp_c;
+
+                    string iconPath = GetWeatherIconPath(condition);
+
+                    HourlyForecasts.Add(new HourlyForecast
+                    {
+                        Time = time,
+                        Icon = iconPath,
+                        Temperature = temperature,
+                        Condition = condition
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                Error = $"An error occurred: {ex.Message}";
+                    Debug.WriteLine($"An error occurred: {ex.Message}");
+            }
+        }
+
+        // Helper method to get the index of the current hour in the forecast data
+        private int GetCurrentHourIndex(dynamic forecastData)
+        {
+            DateTime currentTime = DateTime.Now;
+            string currentHourStr = currentTime.ToString("yyyy-MM-dd HH");
+
+            for (int i = 0; i < forecastData.Count; i++)
+            {
+                string hourDataTimeStr = forecastData[i].time;
+                if (hourDataTimeStr.StartsWith(currentHourStr))
+                {
+                    return i;
+                }
+            }
+
+            return -1; // Current hour not found
         }
 
         private string GetWeatherIconPath(string condition)
@@ -201,7 +277,6 @@ namespace WeatherApp
             // Adjust the path according to your actual SVG file location
             return $"Resources.Images.{iconName}";
         }
-
 
         protected virtual void OnPropertyChanged(string propertyName)
         {

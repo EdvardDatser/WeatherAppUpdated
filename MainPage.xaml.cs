@@ -2,7 +2,6 @@
 using System;
 using System.Timers;
 using System.Threading.Tasks;
-using WeatherApp.ViewModel;
 
 namespace WeatherApp
 {
@@ -10,7 +9,6 @@ namespace WeatherApp
     {
         public WeatherViewModel ViewModel { get; }
         private System.Timers.Timer _timer;  // Use the fully qualified name
-        MainViewModel mainViewModel = new MainViewModel();
 
         public MainPage()
         {
@@ -20,9 +18,9 @@ namespace WeatherApp
             BindingContext = ViewModel;
 
             // Periodically update the weather data
-            //_timer = new System.Timers.Timer(900000); // Set the interval to 1 minute (60000 milliseconds)  (Постявил 15 минут (900000 милисекунд))
-            //_timer.Elapsed += async (sender, e) => await UpdateWeatherData();
-            //_timer.Start();
+            _timer = new System.Timers.Timer(900000); // Set the interval to 15 minutes (900000 milliseconds)
+            _timer.Elapsed += async (sender, e) => await UpdateWeatherData();
+            _timer.Start();
 
             GetPermission();
         }
@@ -37,24 +35,29 @@ namespace WeatherApp
             status = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
             if (status == PermissionStatus.Granted)
             {
-                return;
-            }
-            else
-            {
-                await mainViewModel.RequsetLocation();
                 await UpdateWeatherData();
                 ErrorLabel.Text = null;
             }
-            
+            else
+            {
+                var permissionStatus = await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
+                if (permissionStatus == PermissionStatus.Granted)
+                {
+                    await UpdateWeatherData();
+                    ErrorLabel.Text = null;
+                }
+                else
+                {
+                    ErrorLabel.Text = "Location permission denied.";
+                }
+            }
         }
 
         protected override void OnAppearing()
         {
-
             base.OnAppearing();
             WeatherUpdate();
         }
-
 
         private void WeatherUpdate()
         {
@@ -107,7 +110,5 @@ namespace WeatherApp
                 MenuOverlay.IsVisible = false;
             }
         }
-
-
     }
 }

@@ -4,12 +4,11 @@
              x:Class="WeatherApp.MainPage">
 
     <Grid>
-        
         <Image Source="rain_gif.gif" Aspect="AspectFill" IsAnimationPlaying="True" />
         <!-- Main content -->
-        <StackLayout Padding="1" VerticalOptions="Center">
+        <StackLayout Padding="10" VerticalOptions="Center">
             <!-- Weather card to display temperature and condition -->
-            <Frame x:Name="WeatherCard" CornerRadius="15" HasShadow="True" Padding="30" Margin="60" WidthRequest="350">
+            <Frame x:Name="WeatherCard" CornerRadius="15" HasShadow="True" Padding="30" Margin="20" WidthRequest="350" BackgroundColor="White">
                 <StackLayout>
                     <Label x:Name="LocationLabel" Text="{Binding Location}" FontSize="Large" Padding="10" HorizontalOptions="Center" TextColor="Black"/>
 
@@ -22,6 +21,25 @@
                     <Label x:Name="ConditionLabel" Text="{Binding Condition}" FontSize="Medium" HorizontalOptions="Center" TextColor="Black"/>
                 </StackLayout>
             </Frame>
+
+            <!-- Hourly forecast -->
+            <CollectionView ItemsSource="{Binding HourlyForecasts}" Margin="10">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame CornerRadius="10" Padding="10" Margin="5" BackgroundColor="White">
+                            <StackLayout HorizontalOptions="Center">
+                                <Label Text="{Binding Time, StringFormat='{0:HH:mm}'}" FontSize="Medium" HorizontalOptions="Center" TextColor="Black"/>
+                                <Image Source="{Binding Icon}" WidthRequest="30" HeightRequest="30" HorizontalOptions="Center"/>
+                                <Label Text="{Binding Temperature, StringFormat='{0}°C'}" FontSize="Medium" HorizontalOptions="Center" TextColor="Black"/>
+                                <Label Text="{Binding Condition}" FontSize="Small" HorizontalOptions="Center" TextColor="Gray"/>
+                            </StackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Horizontal"/>
+                </CollectionView.ItemsLayout>
+            </CollectionView>
         </StackLayout>
 
         <!-- Error Label -->
@@ -29,7 +47,7 @@
 
         <!-- Menu button in the top right corner -->
         <Button x:Name="MenuButton" Text="☰" Clicked="OnMenuClicked" HorizontalOptions="End" VerticalOptions="Start" BackgroundColor="#C0C0C0" FontSize="Large" />
-        
+
         <!-- Overlay with entry box for location -->
         <AbsoluteLayout x:Name="MenuOverlay" IsVisible="False" BackgroundColor="Black" Opacity="0.8" 
                         HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
