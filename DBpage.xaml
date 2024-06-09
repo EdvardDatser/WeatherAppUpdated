@@ -9,7 +9,6 @@
         <StackLayout Orientation="Horizontal">
             <Button Text="Save" Clicked="SaveCity"/>
             <Button Text="Cancel" Clicked="Cancel"/>
-            <Button Text="Select city" Clicked="SelectCity"/>
         </StackLayout>
     </StackLayout>
 </ContentPage>

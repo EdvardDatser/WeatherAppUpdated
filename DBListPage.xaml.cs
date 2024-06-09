@@ -5,6 +5,7 @@ namespace WeatherApp;
 
 public partial class DBListPage : ContentPage
 {
+    MainPage mainPage = new MainPage();
     public DBListPage()
     {
         InitializeComponent();
@@ -36,9 +37,23 @@ public partial class DBListPage : ContentPage
     private async void OnItemSelected(object sender, SelectedItemChangedEventArgs e)
     {
         City selectedCity = (City)e.SelectedItem;
-        DBpage dBpage = new DBpage();
-        dBpage.BindingContext = selectedCity;
-        await Navigation.PushAsync(dBpage);
+
+        mainPage.anotherlocation = selectedCity.CityName;
+
+        City selectCity = App.Database.SelectCityByName(mainPage.anotherlocation);
+
+        if (selectCity != null)
+        {
+
+            mainPage.SelectFavoriteCity = true;
+            await Navigation.PushAsync(mainPage);
+
+        }
+        else
+        {
+            // Обработка ситуации, когда город не найден
+            await DisplayAlert("Error", "City not found", "OK");
+        }
     }
 
     public async void AddFavorite(object sender, EventArgs e)

@@ -25,26 +25,6 @@ public partial class DBpage : ContentPage
         this.Navigation.PopAsync();
     }
 
-    private async void SelectCity(object sender, EventArgs e)
-    {
-        var city = (City)BindingContext;
-        mainPage.anotherlocation = city.CityName;
-
-        City selectedCity = App.Database.SelectCityByName(mainPage.anotherlocation);
-
-        if (selectedCity != null)
-        {
-
-            mainPage.SelectFavoriteCity = true;
-            await Navigation.PushAsync(mainPage);
-
-        }
-        else
-        {
-            // Обработка ситуации, когда город не найден
-            await DisplayAlert("Error", "City not found", "OK");
-        }
-    }
     // добавляется температура при добавлении города
     public async Task RetrieveWeatherData(string location, City city)
     {
