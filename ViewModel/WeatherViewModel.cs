@@ -2,10 +2,12 @@
 using Plugin.LocalNotification;
 using System;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Net.Http;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace WeatherApp
 {
@@ -104,6 +106,36 @@ namespace WeatherApp
                 OnPropertyChanged(nameof(Humidity));
             }
         }
+        
+        public string Wind_dir
+        {
+            get => _wind_dir;
+            set
+            {
+                _wind_dir = value;
+                OnPropertyChanged(nameof(Wind_dir));
+            }
+        }
+
+        public string Wind_kph
+        {
+            get => _wind_kph;
+            set
+            {
+                _wind_kph = value;
+                OnPropertyChanged(nameof(Wind_kph));
+            }
+        }
+        
+        public string Feelslike_c
+        {
+            get => _feelslike_c;
+            set
+            {
+                _feelslike_c = value;
+                OnPropertyChanged(nameof(Feelslike_c));
+            }
+        }
 
         public string WeatherIconPath
         {
@@ -182,6 +214,11 @@ namespace WeatherApp
                         Wind_dir = $"Wind direction: {wind_dir}";
                         Wind_kph = $"Wind speed: {wind_kph}km";
                         Feelslike_c = $"Feels like: {feelslike_c}°C";
+                        Wind_dir = $"Wind directiond: {wind_dir}";
+                        Wind_kph = $"Wind speed: {wind_kph}km";
+                        Feelslike_c = $"Feelslike: {feelslike_c}°C";
+
+                        WeatherIconPath = GetWeatherIconPath(condition);
 
                         WeatherIconPath = GetWeatherIcon(condition);
 

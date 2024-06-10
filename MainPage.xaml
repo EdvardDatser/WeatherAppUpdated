@@ -49,7 +49,6 @@
                 </StackLayout>
             </Frame>
         </StackLayout>
-
         <!-- Error Label -->
         <Label x:Name="ErrorLabel" Text="{Binding Error}" FontSize="Large" HorizontalOptions="Center" TextColor="Red"/>
 
