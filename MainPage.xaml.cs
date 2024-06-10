@@ -9,7 +9,7 @@ namespace WeatherApp
     public partial class MainPage : ContentPage
     {
         public WeatherViewModel ViewModel { get; }
-        private System.Timers.Timer _timer;  // Use the fully qualified name
+        private System.Timers.Timer _timer;
         MainViewModel mainViewModel = new MainViewModel();
 
         public MainPage()
@@ -54,7 +54,8 @@ namespace WeatherApp
             WeatherUpdate();
         }
 
-        private void WeatherUpdate()
+        // Change protection level to public or internal
+        public void WeatherUpdate()
         {
             if (SelectFavoriteCity)
             {

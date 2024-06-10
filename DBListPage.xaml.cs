@@ -1,37 +1,47 @@
 ﻿using Newtonsoft.Json.Linq;
 using WeatherApp.ViewModel;
+using System.Collections.ObjectModel;
+using System.Net.Http;
+using System.Threading.Tasks;
+using Microsoft.Maui.Controls;
 
 namespace WeatherApp;
 
 public partial class DBListPage : ContentPage
 {
     MainPage mainPage = new MainPage();
+    public ObservableCollection<City> Cities { get; set; }
+
     public DBListPage()
     {
         InitializeComponent();
+        Cities = new ObservableCollection<City>(App.Database.GetItems());
+        BindingContext = this;
     }
 
     protected override void OnAppearing()
     {
-        cityList.ItemsSource = App.Database.GetItems();
         base.OnAppearing();
         UpdateWeather();
     }
 
     private async void UpdateWeather()
     {
-        //должно обновлять температуру при запуске этой страницы (еще не проверял)
-        // Получаем список городов из базы данных
+        // Get list of cities from the database
         var cities = App.Database.GetItems();
 
-        // Перебираем каждый город и обновляем его температуру
+        // Update temperature for each city
         foreach (var city in cities)
         {
             await RetrieveWeatherData(city.CityName, city);
         }
 
-        // Обновляем источник данных для списка городов
-        cityList.ItemsSource = cities;
+        // Update data source for the list of cities
+        Cities.Clear();
+        foreach (var city in cities)
+        {
+            Cities.Add(city);
+        }
     }
 
     private async void OnItemSelected(object sender, SelectedItemChangedEventArgs e)
@@ -44,14 +54,11 @@ public partial class DBListPage : ContentPage
 
         if (selectCity != null)
         {
-
             mainPage.SelectFavoriteCity = true;
             await Navigation.PushAsync(mainPage);
-
         }
         else
         {
-            // Обработка ситуации, когда город не найден
             await DisplayAlert("Error", "City not found", "OK");
         }
     }
@@ -95,12 +102,15 @@ public partial class DBListPage : ContentPage
                 string humidity = data["current"]["humidity"].ToString();
                 string condition = data["current"]["condition"]["text"].ToString();
 
-                // После получения температуры присваиваем ее объекту city
+                // Set temperature, humidity, and condition properties
                 city.temperature = temperature;
                 city.humidity = humidity;
                 city.condition = condition;
 
-                // Сохраняем объект city в базе данных
+                // Set WeatherIconPath based on condition
+                city.WeatherIconPath = GetWeatherIcon(condition);
+
+                // Save the updated city data
                 App.Database.SaveItem(city);
             }
             else
@@ -108,5 +118,53 @@ public partial class DBListPage : ContentPage
                 await DisplayAlert("Error", "City not found. Check the spelling of the city", "OK");
             }
         }
+    }
+
+    public static string GetWeatherIcon(string condition)
+    {
+        string basePath = "Wicons/";
+        string iconPath = basePath + "default.svg"; // Default icon
+
+        try
+        {
+            if (condition.Contains("Clear") || condition.Contains("Sunny"))
+            {
+                iconPath = basePath + "sun.png";
+            }
+            else if (condition.Contains("Cloudy") || condition.Contains("Overcast") || condition.Contains("Partly cloudy"))
+            {
+                iconPath = basePath + "cloud.png";
+            }
+            else if (condition.Contains("Mist") || condition.Contains("Fog"))
+            {
+                iconPath = basePath + "fog.png";
+            }
+            else if (condition.Contains("Rain") || condition.Contains("rain") || condition.Contains("Light") || condition.Contains("Patchy"))
+            {
+                iconPath = basePath + "rain.png";
+            }
+            else if (condition.Contains("Snow") || condition.Contains("snow"))
+            {
+                iconPath = basePath + "snow.png";
+            }
+            else if (condition.Contains("Thunderstorm"))
+            {
+                iconPath = basePath + "lightning.png";
+            }
+            else if (condition.Contains("Hurricane"))
+            {
+                iconPath = basePath + "hurricane.png";
+            }
+
+            // Log the selected icon path
+            Console.WriteLine("Selected icon path: " + iconPath);
+        }
+        catch (Exception ex)
+        {
+            // Log the exception if any
+            Console.WriteLine("Error selecting icon path: " + ex.Message);
+        }
+
+        return iconPath;
     }
 }

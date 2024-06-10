@@ -20,6 +20,40 @@ namespace WeatherApp
         private string _error;
         private string _humidity;
         private ObservableCollection<HourlyForecast> _hourlyForecasts;
+        private string _wind_dir;
+        private string _wind_kph;
+        private string _feelslike_c;
+
+
+        public string Wind_dir
+        {
+            get => _wind_dir;
+            set
+            {
+                _wind_dir = value;
+                OnPropertyChanged(nameof(Wind_dir));
+            }
+        }
+
+        public string Wind_kph
+        {
+            get => _wind_kph;
+            set
+            {
+                _wind_kph = value;
+                OnPropertyChanged(nameof(Wind_kph));
+            }
+        }
+
+        public string Feelslike_c
+        {
+            get => _feelslike_c;
+            set
+            {
+                _feelslike_c = value;
+                OnPropertyChanged(nameof(Feelslike_c));
+            }
+        }
 
         public string Error
         {
@@ -137,12 +171,19 @@ namespace WeatherApp
                         string curlocation = data.location.name;
                         string temperature = data.current.temp_c;
                         string condition = data.current.condition.text;
+                        string wind_dir = data.current.wind_dir;
+                        string wind_kph = data.current.wind_kph;
+                        string feelslike_c = data.current.feelslike_c;
 
                         Location = curlocation;
                         Temperature = $"Temperature: {temperature}°C";
                         Condition = condition;
 
-                        WeatherIconPath = GetWeatherIconPath(condition);
+                        Wind_dir = $"Wind direction: {wind_dir}";
+                        Wind_kph = $"Wind speed: {wind_kph}km";
+                        Feelslike_c = $"Feels like: {feelslike_c}°C";
+
+                        WeatherIconPath = GetWeatherIcon(condition);
 
                         PopulateHourlyForecast(data);
                     }
@@ -179,10 +220,17 @@ namespace WeatherApp
                         string temperature = data.current.temp_c;
                         string condition = data.current.condition.text;
                         string humidity = data.current.humidity;
+                        string wind_dir = data.current.wind_dir;
+                        string wind_kph = data.current.wind_kph;
+                        string feelslike_c = data.current.feelslike_c;
 
                         Location = curlocation;
                         Temperature = $"Temperature: {temperature}°C";
                         Condition = condition;
+
+                        Wind_dir = $"Wind direction: {wind_dir}";
+                        Wind_kph = $"Wind speed: {wind_kph}km";
+                        Feelslike_c = $"Feels like: {feelslike_c}°C";
 
                         Humidity = $"Humidity: {humidity}%";
                         Location = curlocation;
@@ -214,7 +262,7 @@ namespace WeatherApp
                         };
                         await LocalNotificationCenter.Current.Show(request);
 
-                        WeatherIconPath = GetWeatherIconPath(condition);
+                        WeatherIconPath = GetWeatherIcon(condition);
 
                         PopulateHourlyForecast(data);
                     }
@@ -255,7 +303,7 @@ namespace WeatherApp
                     string condition = hourData.condition.text;
                     string temperature = hourData.temp_c;
 
-                    string iconPath = GetWeatherIconPath(condition);
+                    string iconPath = GetWeatherIcon(condition);
 
                     HourlyForecasts.Add(new HourlyForecast
                     {
@@ -291,34 +339,52 @@ namespace WeatherApp
             return -1; // Current hour not found
         }
 
-        private string GetWeatherIconPath(string condition)
+        public static string GetWeatherIcon(string condition)
         {
-            // Constructing the icon name based on the weather condition
-            string iconName = "";
+            string basePath = "Wicons/";
+            string iconPath = basePath + "default.svg"; // Default icon
 
-            if (condition.ToLower().Contains("rain"))
+            try
             {
-                iconName = "rainy.svg";
+                if (condition.Contains("Clear") || condition.Contains("Sunny"))
+                {
+                    iconPath = basePath + "sun.png";
+                }
+                else if (condition.Contains("Cloudy") || condition.Contains("Overcast") || condition.Contains("Partly cloudy"))
+                {
+                    iconPath = basePath + "cloud.png";
+                }
+                else if (condition.Contains("Mist") || condition.Contains("Fog"))
+                {
+                    iconPath = basePath + "fog.png";
+                }
+                else if (condition.Contains("Rain") || condition.Contains("rain") || condition.Contains("Light") || condition.Contains("Patchy"))
+                {
+                    iconPath = basePath + "rain.png";
+                }
+                else if (condition.Contains("Snow") || condition.Contains("snow"))
+                {
+                    iconPath = basePath + "snow.png";
+                }
+                else if (condition.Contains("Thunderstorm"))
+                {
+                    iconPath = basePath + "lightning.png";
+                }
+                else if (condition.Contains("Hurricane"))
+                {
+                    iconPath = basePath + "hurricane.png";
+                }
+
+                // Log the selected icon path
+                Console.WriteLine("Selected icon path: " + iconPath);
             }
-            else if (condition.ToLower().Contains("snow"))
+            catch (Exception ex)
             {
-                iconName = "snowy.svg";
-            }
-            else if (condition.ToLower().Contains("sunny"))
-            {
-                iconName = "day.svg";
-            }
-            else if (condition.ToLower().Contains("cloud"))
-            {
-                iconName = "cloudy.svg";
-            }
-            else
-            {
-                iconName = "default.svg";
+                // Log the exception if any
+                Console.WriteLine("Error selecting icon path: " + ex.Message);
             }
 
-            // Adjust the path according to your actual SVG file location
-            return $"Resources.Images.{iconName}";
+            return iconPath;
         }
 
         protected virtual void OnPropertyChanged(string propertyName)

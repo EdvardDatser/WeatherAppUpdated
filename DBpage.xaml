@@ -2,13 +2,15 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="WeatherApp.DBpage"
-             Title="DBpage">
-    <StackLayout>
-        <Label Text="City name"/>
-        <Entry Text="{Binding CityName}"/>
-        <StackLayout Orientation="Horizontal">
+             Title="Add City">
+
+    <StackLayout Padding="20">
+        <Label Text="Enter City Name" FontSize="Medium" HorizontalOptions="Center" Margin="0,0,0,20"/>
+        <Entry Placeholder="Type city name here" Text="{Binding CityName}" Margin="0,0,0,20"/>
+        <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Margin="0,10,0,0">
             <Button Text="Save" Clicked="SaveCity"/>
-            <Button Text="Cancel" Clicked="Cancel"/>
+            <Button Text="Cancel" Clicked="Cancel" Margin="10,0,0,0"/>
         </StackLayout>
     </StackLayout>
+
 </ContentPage>

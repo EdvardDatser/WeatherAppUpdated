@@ -49,7 +49,6 @@
 
 	<ItemGroup>
 	  <MauiImage Remove="Resources\Images\day.svg" />
-	  <MauiImage Remove="Resources\Images\thunder.svg" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -57,8 +56,6 @@
 	  <None Remove="Assets\giphy.gif" />
 	  <None Remove="Assets\govno.jpeg" />
 	  <None Remove="Assets\image.gif" />
-	  <None Remove="Resources\Images\day.svg" />
-	  <None Remove="Resources\Images\thunder.svg" />
 	  <None Remove="Resources\Raw\cloudy.svg" />
 	  <None Remove="Resources\Raw\rainy-6.svg" />
 	  <None Remove="Resources\Raw\snowy-6.svg" />
@@ -67,6 +64,14 @@
 	  <None Remove="Resources\Raw\weather.svg" />
 	  <None Remove="Resources\Raw\weather_sagittarius.svg" />
 	  <None Remove="Resources\Raw\weather_sunset.svg" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Include="Resources\Images\cloud.png" />
+	  <Content Include="Resources\Images\hurricane.png" />
+	  <Content Include="Resources\Images\rain.png" />
+	  <Content Include="Resources\Images\snow.png" />
+	  <Content Include="Resources\Images\sun.png" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -93,16 +98,15 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <EmbeddedResource Include="Resources\Images\cloudy.svg" />
 	  <EmbeddedResource Include="Resources\Images\day.svg" />
-	  <EmbeddedResource Include="Resources\Images\rainy.svg" />
-	  <EmbeddedResource Include="Resources\Images\thunder.svg" />
-	  <MauiAsset Include="Resources\Images\snowy.svg" />
-	  <EmbeddedResource Include="Resources\Images\weathersvg.svg" />
 	</ItemGroup>
 
 	<ItemGroup>
 	  <Folder Include="Resources\Raw\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Page Include="Resources\Images\lightning.png" />
 	</ItemGroup>
 
 	<ItemGroup>

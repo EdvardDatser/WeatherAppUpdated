@@ -2,39 +2,47 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="WeatherApp.DBListPage"
-             Title="DBListPage">
+             Title="FavoriteCity">
     <StackLayout>
-        <ListView x:Name="cityList" ItemsSource="{Binding}" ItemSelected="OnItemSelected">
+        <ListView x:Name="cityList" ItemsSource="{Binding Cities}" ItemSelected="OnItemSelected" RowHeight="100">
+            <!-- Adjust RowHeight as needed -->
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
                         <ViewCell.View>
-                            <StackLayout>
-                                <Label FontSize="Medium">
-                                    <Label.FormattedText>
-                                        <FormattedString>
-                                            <Span Text="{Binding CityName}"/>
-                                            <Span Text="                                    "/>
-                                            <Span Text="{Binding temperature}" />
-                                            <Span Text="°C" />
-                                        </FormattedString>
-                                    </Label.FormattedText>
-                                </Label>
-                                <Label>
-                                    <Label.FormattedText>
-                                        <FormattedString>
-                                            <Span Text="Humidity: "/>
-                                            <Span Text="{Binding humidity}"/>
-                                            <Span Text="                                "/>
-                                            <Span Text="{Binding condition}" />
-                                        </FormattedString>
-                                    </Label.FormattedText>
-                                </Label>
+                            <StackLayout Orientation="Horizontal" Spacing="10">
+                                <!-- Add spacing between items -->
+                                <!-- Image element -->
+                                <Image Source="{Binding WeatherIconPath}" WidthRequest="50" HeightRequest="50" Margin="5"/>
+
+                                <StackLayout VerticalOptions="Center">
+                                    <Label FontSize="Medium">
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span Text="{Binding CityName}"/>
+                                                <Span Text="                                "/>
+                                                <Span Text="{Binding temperature}" />
+                                                <Span Text="°C" />
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+                                    <Label>
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span Text="Humidity: "/>
+                                                <Span Text="{Binding humidity}"/>
+                                                <Span Text="%"/>
+                                                <Span Text="                             "/>
+                                                <Span Text="{Binding condition}" />
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+                                </StackLayout>
                             </StackLayout>
                         </ViewCell.View>
                         <ViewCell.ContextActions>
-                            <MenuItem x:Name="DeleteByHold" Text="Kustuta" IsDestructive="True" Clicked="DeleteCity"/>
-                            <MenuItem x:Name="MuudaByHold" Text="Muuda" IsDestructive="True" Clicked="MuudaCity"/>
+                            <MenuItem x:Name="DeleteByHold" Text="Delete" IsDestructive="True" Clicked="DeleteCity"/>
+                            <MenuItem x:Name="MuudaByHold" Text="Edit" IsDestructive="True" Clicked="MuudaCity"/>
                         </ViewCell.ContextActions>
                     </ViewCell>
                 </DataTemplate>
